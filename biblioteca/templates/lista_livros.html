@@ -13,7 +13,15 @@
         {% for livro in livros %}
             <li>
                 <a href=#><strong>Título:</strong> {{ livro.titulo }}</a><br>
-                <a href="{% url 'author_detail' livro.autor.id %}"><strong>Autor:</strong> {{ livro.autor }}</a><br>
+                                <strong>Autor(es):</strong>
+                {% for autor in livro.autor_many.all %}
+                    <a href="{% url 'author_detail' autor.id %}">
+                        {{ autor.name }}
+                    </a>{% if not forloop.last %}, {% endif %}
+                {% empty %}
+                    Nenhum autor cadastrado.
+                {% endfor %}
+                <br>
                 <a href=#><strong>Ano:</strong> {{ livro.ano }}</a>
             </li>
             <hr>

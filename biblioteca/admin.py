@@ -4,9 +4,9 @@ from .models import Livro, Author, Category
 # Register your models here.
 @admin.register(Livro)
 class LivroAdmin(admin.ModelAdmin):
-    list_display = ('titulo', 'autor', 'ano_publicacao', 'disponivel')
+    list_display = ('titulo', 'ano_publicacao', 'disponivel')
     list_filter = ('disponivel', 'category')
-    filter_horizontal = ('category',)
+    filter_horizontal = ('category', 'autor_many')
 
 @admin.register(Author)
 class AuthorAdmin(admin.ModelAdmin):
