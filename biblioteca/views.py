@@ -1,5 +1,6 @@
 from django.shortcuts import render
-from .models import Livro
+from .models import Livro, Author, Category
+from django.shortcuts import get_object_or_404
 # Create your views here.
 
 def lista_livros(request):
@@ -8,3 +9,12 @@ def lista_livros(request):
         'livros': livros
     }
     return render(request, 'lista_livros.html', context)
+
+def author_detail(request, author_id):
+    author = get_object_or_404(Author, id=author_id)
+    livros = Livro.objects.filter(autor=author)
+    context = {
+        'author': author,
+        'livros': livros
+    }
+    return render(request, 'author_detail.html', context)

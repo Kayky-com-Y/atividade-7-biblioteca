@@ -12,9 +12,9 @@
     <ul>
         {% for livro in livros %}
             <li>
-                <strong>Título:</strong> {{ livro.titulo }}<br>
-                <strong>Autor:</strong> {{ livro.autor }}<br>
-                <strong>Ano:</strong> {{ livro.ano }}
+                <a href=#><strong>Título:</strong> {{ livro.titulo }}</a><br>
+                <a href="{% url 'author_detail' livro.autor.id %}"><strong>Autor:</strong> {{ livro.autor }}</a><br>
+                <a href=#><strong>Ano:</strong> {{ livro.ano }}</a>
             </li>
             <hr>
         {% empty %}
