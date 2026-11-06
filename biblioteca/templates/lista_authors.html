@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Autores</title>
+</head>
+<body>
+    <h1>Lista de Autores</h1>
+    <ul>
+        {% for author in authors %}
+            <li><a href="{% url 'author_detail' author.id %}">{{ author.name }}</a></li>
+        {% endfor %}
+    </ul>
+
+    <div>
+        <a href="{% url 'author_form' %}">Cadastrar novo autor</a>
+        <a href="{% url 'lista_livros' %}">Ir para lista de livros</a>
+    </div>
+</body>
+</html>
