@@ -16,9 +16,13 @@
                                 <strong>Autor(es):</strong>
                 {% for autor in livro.autor_many.all %}
                     <a href="{% url 'author_detail' autor.id %}">
-                        {{ autor.name }}
-                    </a>{% if not forloop.last %}, {% endif %}
-                {% empty %}
+                        {% if forloop.last %}
+                            {{ autor.name }}
+                        {% else %}
+                            {{ autor.name }}, 
+                        {% endif %}
+                        
+                        {% empty %}
                     Nenhum autor cadastrado.
                 {% endfor %}
                 <br>
@@ -31,5 +35,6 @@
     </ul>
 
     <div><a href="{% url 'lista_authors' %}">Ir para lista de autores</a></div>
+    <div><a href="{% url 'livro_form' %}">Cadastrar novo livro</a></div>
 </body>
 </html>

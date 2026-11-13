@@ -6,7 +6,7 @@ from django.contrib import admin
 
 class Livro(models.Model):
     titulo = models.CharField(max_length=200)
-    autor_many = models.ManyToManyField('Author', related_name='books', blank=True, null=True)
+    autor_many = models.ManyToManyField('Author', related_name='books', blank=True)
     category = models.ManyToManyField('Category', related_name='books', blank=True, null=True)
     ano_publicacao = models.IntegerField()
     disponivel = models.BooleanField(default=True)

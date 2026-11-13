@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from .models import Livro, Author, Category
 from django.shortcuts import get_object_or_404
-from .forms import AutorForm
+from .forms import AutorForm, LivroForm
 
 # Create your views here.
 
@@ -42,3 +42,32 @@ def lista_authors(request):
         'authors': authors
     }
     return render(request, 'lista_authors.html', context)
+
+
+def livro_form(request, livro_id=None):
+    if livro_id:
+        livro = get_object_or_404(Livro, id=livro_id)
+    else:
+        livro = None
+
+    if request.method == 'POST':
+        form = LivroForm(request.POST, instance=livro)
+
+        if form.is_valid():
+            livro = form.save()
+
+            autor = livro.autor_many.first()
+
+            return redirect('author_detail', author_id=autor.id)
+
+    else:
+        form = LivroForm(instance=livro)
+
+    titulo = 'Editar livro' if livro else 'Novo livro'
+    botao = 'Salvar alterações' if livro else 'Cadastrar livro'
+
+    return render(request, 'livro_form.html', {
+        'form': form,
+        'titulo': titulo,
+        'botao': botao
+    })
