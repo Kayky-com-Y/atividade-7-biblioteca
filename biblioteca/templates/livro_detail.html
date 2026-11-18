@@ -12,6 +12,8 @@
     <p><strong>Autor:</strong> {{ livro.autor }}</p>
     <p><strong>Categoria:</strong> {{ livro.category }}</p>
     <p><strong>Ano de Publicação:</strong> {{ livro.ano_publicacao }}</p>
+    <p><strong>Páginas:</strong> {{ livro.paginas|default:"Não informado" }}</p>
+    <p><strong>ISBN:</strong> {{ livro.isbn|default:"Não informado" }}</p>
     <p><strong>Disponível:</strong> {{ livro.disponivel }}</p>
     <button><a href="{% url 'livro_update' livro.id %}">Editar Livro</a></button>
 </body>
