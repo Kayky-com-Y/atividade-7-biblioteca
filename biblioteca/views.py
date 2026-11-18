@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from .models import Livro, Author, Category
 from django.shortcuts import get_object_or_404
-from .forms import AutorForm
+from .forms import AutorForm, LivroForm
 # Create your views here.
 
 def lista_livros(request):
@@ -39,3 +39,21 @@ def author_create(request):
     else:
         form = AutorForm()
     return render(request, 'author_form.html', {'form': form})
+
+def livro_form(request, livro_id=None):
+    livro = get_object_or_404(Livro, id=livro_id) if livro_id is not None else None
+    if request.method == 'POST':
+        form = LivroForm(request.POST, instance=livro)
+        if form.is_valid():
+            livro = form.save()
+            return redirect('author_detail', author_id=livro.autor.id)
+    else:
+        form = LivroForm(instance=livro)
+    return render(request, 'livro_form.html', {'form': form})
+
+def livro_detail(request, livro_id):
+    livro = get_object_or_404(Livro, id=livro_id)
+    context = {
+        'livro': livro
+    }
+    return render(request, 'livro_detail.html', context)

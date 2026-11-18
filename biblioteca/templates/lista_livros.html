@@ -8,13 +8,15 @@
 </head>
 <body>
     <h1>Lista de Livros</h1>
-
+    <button><a href="{% url 'lista_autores' %}">Lista de Autores</a></button>
+    <button><a href="{% url 'livro_create' %}">Novo Livro</a></button>
     <ul>
         {% for livro in livros %}
             <li>
-                <a href=#><strong>Título:</strong> {{ livro.titulo }}</a><br>
+                <a href="{% url 'livro_detail' livro.id %}"><strong>Título:</strong> {{ livro.titulo }}</a><br>
                 <a href="{% url 'author_detail' livro.autor.id %}"><strong>Autor:</strong> {{ livro.autor }}</a><br>
-                <a href=#><strong>Ano:</strong> {{ livro.ano }}</a>
+                <p><strong>Ano:</strong> {{ livro.ano_publicacao }}</p>
+                <button><a href="{% url 'livro_update' livro.id %}">Editar Livro</a></button>
             </li>
             <hr>
         {% empty %}

@@ -8,7 +8,7 @@
 <body>
     <h1>Cadastro de Autor</h1>
     <form method="post">
-        {{ csrf_token }}
+        {% csrf_token %}
         {{ form.as_p }}
         <button type="submit">Salvar</button>
     </form>
