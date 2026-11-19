@@ -50,4 +50,4 @@ class LivroForm(forms.ModelForm):
 
     class Meta:
         model = Livro
-        fields = ['titulo', 'autor', 'category', 'ano_publicacao', 'paginas', 'isbn', 'disponivel']
+        fields = ['titulo', 'autor', 'category', 'ano_publicacao', 'paginas', 'isbn', 'capa', 'disponivel']
