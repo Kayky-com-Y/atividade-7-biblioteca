@@ -8,6 +8,7 @@
 <body>
     <button><a href="{% url 'lista_livros' %}">Lista de Livros</a></button>
     <button><a href="{% url 'lista_autores' %}">Lista de Autores</a></button>
+    <button><a href="{% url 'sobre' %}">Sobre</a></button>
     <h1>{{ livro.titulo }}</h1>
     {% if livro.capa %}
         <img src="{{ livro.capa.url }}" alt="Capa de {{ livro.titulo }}">
@@ -19,5 +20,6 @@
     <p><strong>ISBN:</strong> {{ livro.isbn|default:"Não informado" }}</p>
     <p><strong>Disponível:</strong> {{ livro.disponivel }}</p>
     <button><a href="{% url 'livro_update' livro.id %}">Editar Livro</a></button>
+    <button><a href="{% url 'livro_delete' livro.id %}">Excluir Livro</a></button>
 </body>
 </html>

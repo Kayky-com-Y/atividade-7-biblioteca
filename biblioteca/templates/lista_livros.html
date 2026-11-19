@@ -9,6 +9,7 @@
 <body>
     <h1>Lista de Livros</h1>
     <button><a href="{% url 'lista_autores' %}">Lista de Autores</a></button>
+    <button><a href="{% url 'sobre' %}">Sobre</a></button>
     <button><a href="{% url 'livro_create' %}">Novo Livro</a></button>
     <ul>
         {% for livro in livros %}
@@ -20,6 +21,7 @@
                 <a href="{% url 'author_detail' livro.autor.id %}"><strong>Autor:</strong> {{ livro.autor }}</a><br>
                 <p><strong>Ano:</strong> {{ livro.ano_publicacao }}</p>
                 <button><a href="{% url 'livro_update' livro.id %}">Editar Livro</a></button>
+                <button><a href="{% url 'livro_delete' livro.id %}">Excluir Livro</a></button>
             </li>
             <hr>
         {% empty %}
