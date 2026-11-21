@@ -92,3 +92,9 @@ a - Na CreateView, quem faz o if request.method == "POST" que escrevíamos à m�
 8 - Que outras informações do settings.py também devem sair do código (por exemplo, SECRET_KEY e DEBUG)?
 
     SECRET_KEY, DEBUG e ALLOWED_HOSTS
+
+FONTES:
+https://docs.djangoproject.com/en/6.1/ref/settings/#databases
+https://docs.djangoproject.com/en/stable/ref/django-admin/#dumpdata
+https://docs.djangoproject.com/en/6.1/ref/django-admin/#loaddata
+https://pypi.org/project/python-dotenv
