@@ -56,3 +56,39 @@ a - Na CreateView, quem faz o if request.method == "POST" que escrevíamos à m�
  d -  Cite uma vantagem e uma desvantagem das CBVs em relação às FBVs. Em que situação você ainda escolheria uma função?
 
  Uma vantagem das CBVs é reduzir código repetitivo e facilitar a reutilização do comportamento genérico. Uma desvantagem é que o fluxo pode ficar menos explícito, especialmente com muitas heranças ou personalizações. Eu escolheria uma FBV para uma operação pequena ou muito específica, quando a sequência de ações fica mais clara escrita diretamente.
+
+1 - Quais as diferenças entre o SQLite e o PostgreSQL, e quando usar cada um?
+
+    O SQLite é mais simples e prático para projetos pequenos, enquanto o PostgreSQL oferece recursos mais completos para aplicações maiores e ambientes de produção.
+
+2 - Qual driver o Django precisa para o PostgreSQL (por exemplo, psycopg) e como instalá-lo?
+
+    O Psycopg 3 e para instalalo rode pip o install psycopg[binary]
+
+3 - O que significa cada chave do DATABASES (ENGINE, NAME, USER, PASSWORD, HOST, PORT)?
+
+    ENGINE: Define qual mecanismo de banco de dados será utilizado.
+    NAME: O nome do banco de dados.
+    USER: O usuário utilizado para acessar o banco.
+    PASSWORD: A senha desse usuário.
+    HOST: O endereço do servidor onde o banco está hospedado.
+    PORT: A porta utilizada para a conexão.
+
+4 - Como criar o banco e um usuário próprio para a aplicação, sem usar o superusuário postgres?
+
+
+5 - O que são variáveis de ambiente e por que não se escrevem senhas no código?
+
+    Variáveis de ambiente são valores armazenados fora do código-fonte, que podem ser acessados durante a execução, assim protejendo configurações privadas do codigo da aplicação. Se essas senhas fossem escritas diretamente no codigo, averia um serio risco de vasamentos de dados inportantes para o projeto e uma quebra de segurança grave.
+
+6 -Como usar uma biblioteca (python-decouple, python-dotenv ou django-environ) para ler um arquivo .env no settings.py?
+
+    Você instala a biblioteca, cria o arquivo .env (adicionando suas configurações como senhas e portas) e depois em setting, inportamos a biblioteca e trocamos os dados padroes pelas variaveis de ambiente.
+
+7 - Qual o papel do .gitignore e do .env.example?
+
+    O .gitignore inpede que arquivos indesejaveis sejam enviados para o repositorio incluindo o .env em quanto o .env.example é simplesmente a moudura de como o .env deve ser estruturado, mas sem os parametros reais já que o .env original não pode ser enviado diretamente para qualquer repositorio
+
+8 - Que outras informações do settings.py também devem sair do código (por exemplo, SECRET_KEY e DEBUG)?
+
+    SECRET_KEY, DEBUG e ALLOWED_HOSTS
