@@ -12,6 +12,11 @@
     <ul>
         {% for livro in livros %}
             <li>
+                {% if livro.capa %}
+                    <img src="{{ livro.capa.url }}" alt="Capa do Livro" width="100">
+                {% else %}
+                    <span>Sem capa</span>
+                {% endif %}
                 <a href=#><strong>Título:</strong> {{ livro.titulo }}</a><br>
                                 <strong>Autor(es):</strong>
                 {% for autor in livro.autor_many.all %}

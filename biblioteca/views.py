@@ -51,15 +51,14 @@ def livro_form(request, livro_id=None):
         livro = None
 
     if request.method == 'POST':
-        form = LivroForm(request.POST, instance=livro)
+        form = LivroForm(request.POST, request.FILES, instance=livro)
 
         if form.is_valid():
             livro = form.save()
-
             autor = livro.autor_many.first()
-
-            return redirect('author_detail', author_id=autor.id)
-
+            if autor:
+                return redirect('author_detail', author_id=autor.id)
+            return redirect('lista_livros') 
     else:
         form = LivroForm(instance=livro)
 

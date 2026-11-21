@@ -1,7 +1,7 @@
 from django.db import models
 from django.contrib import admin
-from django.core.validators import MinLengthValidator, MinValueValidator, MaxValueValidator, RegexValidator
-from .validators import validar_ano_publicacao
+from django.core.validators import MinLengthValidator, MinValueValidator, MaxValueValidator, RegexValidator, FileExtensionValidator
+from .validators import validar_ano_publicacao, validar_tamanho_arquivo
 
 class Livro(models.Model):
     titulo = models.CharField(max_length=200, validators=[MinLengthValidator(3, message='O título deve ter no mínimo 3 caracteres.')])
@@ -13,6 +13,8 @@ class Livro(models.Model):
             MaxValueValidator(5000, message='O limite é de 5000 páginas.')])
     isbn = models.CharField(max_length=13, blank=True, null=True, verbose_name='ISBN', validators=[RegexValidator(r'^\d{13}$', message='O ISBN deve ter exatamente 13 dígitos numéricos.')])
     disponivel = models.BooleanField(default=True)
+
+    capa = models.ImageField(upload_to='capas/', blank=True, null=True, verbose_name='Capa do Livro', validators=[validar_tamanho_arquivo, FileExtensionValidator(allowed_extensions=['jpg', 'jpeg', 'png'])])
 
     def __str__(self):
         return self.titulo

@@ -31,7 +31,8 @@ class LivroForm(forms.ModelForm):
             'paginas',  
             'isbn',     
             'disponivel',
-            'category'
+            'category',
+            'capa'
         ]
 
         labels = {
@@ -41,7 +42,8 @@ class LivroForm(forms.ModelForm):
             'paginas': 'Número de Páginas',
             'isbn': 'ISBN',
             'disponivel': 'Disponível',
-            'category': 'Categorias'
+            'category': 'Categorias',
+            'capa': 'Capa do Livro'
         }
 
         widgets = {
