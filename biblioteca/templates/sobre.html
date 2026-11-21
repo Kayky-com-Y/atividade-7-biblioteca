@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Sobre a Mini Biblioteca</title>
+</head>
+<body>
+    <h1>Sobre a Mini Biblioteca</h1>
+    <p>Sistema de gerenciamento de livros.</p>
+    <p><strong>Total de livros cadastrados:</strong> {{ total_livros }}</p>
+    <p><strong>Livros disponíveis:</strong> {{ livros_disponiveis }}</p>
+    
+    <a href="{% url 'lista_livros' %}">Voltar para a lista</a>
+</body>
+</html>

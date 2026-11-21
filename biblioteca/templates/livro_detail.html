@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ livro.titulo }}</title>
+</head>
+<body>
+    <h1>{{ livro.titulo }}</h1>
+    
+    {% if livro.capa %}
+        <img src="{{ livro.capa.url }}" alt="Capa" width="200">
+    {% endif %}
+    
+    <p><strong>Autor(es):</strong>
+        {% for autor in livro.autor_many.all %}
+            {{ autor.name }}{% if not forloop.last %}, {% endif %}
+        {% empty %}
+            Nenhum autor cadastrado.
+        {% endfor %}
+    </p>
+    
+    <p><strong>Ano:</strong> {{ livro.ano_publicacao }}</p>
+    <p><strong>Páginas:</strong> {{ livro.paginas|default:"Não informado" }}</p>
+    <p><strong>ISBN:</strong> {{ livro.isbn|default:"Não informado" }}</p>
+    <p><strong>Disponível:</strong> {% if livro.disponivel %}Sim{% else %}Não{% endif %}</p>
+    
+    <a href="{% url 'edit_livro' livro.pk %}">Editar</a> |
+    <a href="{% url 'delete_livro' livro.pk %}">Excluir</a> |
+    <a href="{% url 'lista_livros' %}">Voltar</a>
+</body>
+</html>

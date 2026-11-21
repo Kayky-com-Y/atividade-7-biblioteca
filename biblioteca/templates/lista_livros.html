@@ -17,7 +17,7 @@
                 {% else %}
                     <span>Sem capa</span>
                 {% endif %}
-                <a href=#><strong>Título:</strong> {{ livro.titulo }}</a><br>
+                <a href="{% url 'livro_detail' livro.id %}"><strong>Título:</strong> {{ livro.titulo }}</a><br>
                                 <strong>Autor(es):</strong>
                 {% for autor in livro.autor_many.all %}
                     <a href="{% url 'author_detail' autor.id %}">
