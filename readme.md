@@ -29,3 +29,54 @@ b) A CreateView herda de ModelFormMixin, que automaticamente instancia o formul�
 c) A DeleteView exibe um template de confirmação no GET e só executa a exclusão quando recebe um POST. Isso é uma proteção de segurança contra ataques CSRF e exclusões acidentais. Se a exclusão ocorresse em um GET, qualquer link ou imagem maliciosa em outro site poderia apontar para a URL de exclusão e deletar registros sem a confirmação do usuário, além de bots de indexação poderem acionar a exclusão acidentalmente ao rastrear links.
 
 d) Vantagem: As CBVs reduzem drasticamente a quantidade de código boilerplate. Operações CRUD comuns (listar, detalhar, criar, editar, excluir) são implementadas com poucas linhas, pois o Django já fornece mixins e classes base que gerenciam formulários, templates e redirecionamentos automaticamente. Desvantagem: CBVs podem ser menos flexíveis para lógicas muito específicas ou não convencionais. Quando você precisa de um fluxo de controle muito personalizado (ex: múltiplos formulários na mesma view, validações complexas que dependem de contexto externo, ou integrações com APIs), o código pode ficar mais confuso e difícil de debugar do que uma função simples. Eu escolheria uma FBV quando a lógica for muito específica e não se encaixar nos padrões CRUD, quando precisar de múltiplas operações em uma única requisição, ou quando a equipe tiver menos familiaridade com a hierarquia de classes do Django e preferir código mais linear e explícito.
+
+
+QUESTÃO DE PESQUISA 
+
+
+1. Diferenças entre SQLite e PostgreSQL
+O SQLite é um banco de dados embutido que armazena todos os dados em um único arquivo local, não requerendo instalação de servidor ou configuração complexa de usuários e senhas. Ele é extremamente leve e ideal para desenvolvimento local, testes automatizados, aplicações desktop e prototipagem rápida. No entanto, possui limitações significativas em cenários de alta concorrência, onde múltiplos usuários tentam escrever dados simultaneamente, e não suporta tipos de dados avançados ou extensões complexas. O PostgreSQL, por outro lado, é um sistema gerenciador de banco de dados relacional cliente-servidor robusto e open-source. Ele suporta alta concorrência através do mecanismo MVCC (Multi-Version Concurrency Control), transações ACID rigorosas, tipos de dados especializados como JSONB, arrays e geometria, além de extensões que ampliam suas capacidades. É utilizado em aplicações reais de produção, sistemas com múltiplos usuários simultâneos e cenários que exigem integridade de dados forte e alta disponibilidade. A escolha entre eles depende do contexto: SQLite é perfeito para desenvolvimento e testes, enquanto PostgreSQL é essencial para produção e aplicações que precisam escalar.
+2. Driver do Django para PostgreSQL
+O Django necessita do driver psycopg para se comunicar com o PostgreSQL. Atualmente, existem duas versões principais: o psycopg2 (versão 2, mais consolidada) e o psycopg (versão 3, mais recente). Para instalar, utiliza-se o comando pip install psycopg2-binary para ambientes de desenvolvimento, que é mais simples pois já vem compilado. Para produção, recomenda-se pip install psycopg2 sem o sufixo binary, pois este é compilado especificamente para o sistema operacional em uso, oferecendo melhor performance e compatibilidade.
+3. Significado das chaves do DATABASES
+No dicionário DATABASES do settings.py, cada chave possui um papel específico na configuração da conexão. A chave ENGINE define qual backend de banco de dados o Django utilizará, sendo para PostgreSQL o valor django.db.backends.postgresql. A chave NAME especifica o nome do banco de dados criado no PostgreSQL, como biblioteca_db. A chave USER indica o usuário do PostgreSQL que terá permissão para acessar o banco, enquanto PASSWORD contém a senha desse usuário. A chave HOST define o endereço do servidor onde o PostgreSQL está rodando, sendo localhost ou 127.0.0.1 para desenvolvimento local, ou um IP/domínio em produção. Por fim, a chave PORT especifica a porta de conexão, sendo 5432 o padrão do PostgreSQL.
+4. Criação de banco e usuário próprio
+Nunca se deve utilizar o superusuário postgres em aplicações reais, pois isso representa um risco de segurança significativo. Para criar um banco e usuário dedicados, acessa-se o terminal do PostgreSQL através do comando psql e executam-se comandos SQL específicos. Primeiro, cria-se o usuário com CREATE USER biblioteca_user WITH PASSWORD 'senha_segura', definindo uma senha forte. Em seguida, cria-se o banco com CREATE DATABASE biblioteca_db OWNER biblioteca_user, tornando o novo usuário dono do banco. Concede-se permissões totais com GRANT ALL PRIVILEGES ON DATABASE biblioteca_db TO biblioteca_user. Em versões mais recentes do PostgreSQL (15+), é necessário também conceder acesso ao schema public através de GRANT ALL ON SCHEMA public TO biblioteca_user após conectar ao banco.
+5. Variáveis de ambiente e segurança
+Variáveis de ambiente são valores configurados fora do código da aplicação, sendo injetados pelo sistema operacional ou lidos de arquivos específicos como o .env. Elas permitem que a mesma base de código funcione em diferentes ambientes (desenvolvimento, staging, produção) apenas alterando as variáveis, sem necessidade de modificar o código-fonte. Não se deve escrever senhas diretamente no código por múltiplas razões de segurança e praticidade. Se o código for versionado em repositórios como GitHub e tornado público acidentalmente, todas as credenciais ficarão expostas e comprometidas. Além disso, diferentes ambientes exigem credenciais diferentes, e a rotação de senhas não deve exigir alterações no código e novo deploy. Boas práticas de segurança, como as recomendadas pela OWASP, exigem que segredos fiquem completamente fora do código-fonte.
+6. Uso de python-decouple para leitura do .env
+A biblioteca python-decouple é utilizada para ler variáveis de ambiente de forma estrita, separando completamente a configuração do código. Após instalá-la com pip install python-decouple, importa-se a função config no settings.py e utiliza-se para ler cada variável. Por exemplo, SECRET_KEY = config('SECRET_KEY') lê a chave secreta do ambiente, e DEBUG = config('DEBUG', default=False, cast=bool) lê o modo de depuração com um valor padrão e conversão de tipo. A biblioteca primeiro procura a variável no ambiente do sistema operacional e, se não encontrar, busca no arquivo .env na raiz do projeto.
+7. Papel do .gitignore e .env.example
+O arquivo .gitignore instrui o Git sobre quais arquivos e diretórios não devem ser versionados no repositório. Ele deve incluir obrigatoriamente o arquivo .env, que contém as credenciais reais da aplicação, além de arquivos gerados automaticamente como db.sqlite3, diretórios pycache e arquivos .pyc. Isso garante que informações sensíveis nunca sejam enviadas para repositórios remotos. O arquivo .env.example serve como um modelo template que é versionado no Git. Ele contém todas as chaves de variáveis necessárias para o projeto, mas com valores fictícios ou placeholders. Sua função é servir de guia para outros desenvolvedores, mostrando quais variáveis precisam ser configuradas ao clonar o projeto. Por exemplo, em vez de uma senha real, contém DB_PASSWORD=sua_senha_aqui, indicando que o desenvolvedor deve substituir pelo valor correto.
+8. Outras informações sensíveis no settings.py
+Além das credenciais do banco de dados, diversas outras informações sensíveis devem ser removidas do código e protegidas através de variáveis de ambiente. A SECRET_KEY é vital para a criptografia de sessões, tokens CSRF e assinaturas de cookies, devendo ser mantida em sigilo absoluto. A configuração DEBUG deve ser True apenas em desenvolvimento e False em produção para evitar vazamento de stack traces detalhados que podem expor informações do sistema. A lista ALLOWED_HOSTS define quais domínios e IPs podem acessar a aplicação, prevenindo ataques de host header. Outras informações que devem ser protegidas incluem credenciais de serviços de email (host SMTP, porta, usuário e senha), chaves de API de serviços externos como Google Maps, Stripe ou AWS, e configurações de sistemas de cache como Redis ou Memcached.
+
+
+9. Referências Bibliográficas
+
+Django Software Foundation. Django Documentation: Databases. Disponível em: https://docs.djangoproject.com/en/5.0/ref/databases/.
+
+Django Software Foundation. Django Documentation: Settings. Disponível em: https://docs.djangoproject.com/en/5.0/ref/settings/. 
+
+The PostgreSQL Global Development Group. PostgreSQL Documentation: Creating Roles and Databases. Disponível em: https://www.postgresql.org/docs/current/sql-createrole.html. 
+
+HENRIQUE, Henrique Bastos. Python Decouple. PyPI. Disponível em: https://pypi.org/project/python-decouple/. 
+
+OWASP Foundation. Secrets Management Cheat Sheet. Disponível em: https://cheatsheetseries.owasp.org/cheatsheets/Secrets_Management_Cheat_Sheet.html. 
+
+PSYCOPG. Psycopg Documentation. Disponível em: https://www.psycopg.org/docs/. 
+
+PUTRA, Anton. SQLite vs PostgreSQL Performance. YouTube, 2024. Disponível em: https://share.google/UPs5qFJqJNBf4VHQm. 
+
+DEV.TO Community. SQLite vs Postgres: When to Pick Which Database. Dev.to. Disponível em: https://share.google/fHGS7zLnO8NtveMF6. 
+
+RODRIGUES, João. MySQL, PostgreSQL e SQLite: quando usar cada um (sem dogma). Medium/Dev.to. Disponível em: https://share.google/bUUgpXWiYe7whhEId. 
+
+TELA INICIAL
+![alt text](image-2.png)
+
+LIVRO ESPECIFICO
+![alt text](image-3.png)
+
+LIVROS DO AUTOR 
+![alt text](image-4.png)
