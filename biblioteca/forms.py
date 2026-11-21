@@ -28,6 +28,8 @@ class LivroForm(forms.ModelForm):
             'titulo',
             'autor_many',
             'ano_publicacao',
+            'paginas',  
+            'isbn',     
             'disponivel',
             'category'
         ]
@@ -36,6 +38,8 @@ class LivroForm(forms.ModelForm):
             'titulo': 'Título',
             'autor_many': 'Autor(es)',
             'ano_publicacao': 'Ano de publicação',
+            'paginas': 'Número de Páginas',
+            'isbn': 'ISBN',
             'disponivel': 'Disponível',
             'category': 'Categorias'
         }
@@ -44,25 +48,3 @@ class LivroForm(forms.ModelForm):
             'autor_many': forms.SelectMultiple(),
             'category': forms.CheckboxSelectMultiple()
         }
-
-    def clean_titulo(self):
-        titulo = self.cleaned_data.get('titulo')
-
-        if len(titulo) < 3:
-            raise forms.ValidationError(
-                'O título precisa ter pelo menos 3 caracteres.'
-            )
-
-        return titulo
-
-    def clean_ano_publicacao(self):
-        ano = self.cleaned_data.get('ano_publicacao')
-        ano_atual = timezone.localdate().year
-
-        if ano > ano_atual:
-            raise forms.ValidationError(
-                f'O ano não pode ser posterior a {ano_atual}. '
-                'Informe um ano válido.'
-            )
-
-        return ano
